@@ -1,0 +1,87 @@
+ESPECIFICACÕES DE SOFTWARE (UML, Unified Modeling Language):
+
+
+ANÁLISE E ESPECIFICACÕES DE REQUISITOS:
+
+1. Definir o que são requisitos de software: 
+
+
+ São todos os casos que o sistema utiliza.
+    1. Importar um arquivo do tipo tabela de extensão Excel ".xls" criado pelo programa GERA do O Boticário. 
+    2. Processar a lista importada linha a linha de modo que o "input" do leitor de código de barras seja igual ao código do produto da lista.
+    3. Gerar relatório após o término da conferência da lista. 
+    4. Adicionar a informacão ao arquivo de relatório de que o "Picking List" foi processado com sucesso, emitindo os seguintes dados:
+																DATA
+														  		USUARIO
+																CIDADE
+																NOME DA "PICKING LIST"
+
+2. Apresentar técnicas para descrever o domínio, usuários e tarefas: 
+
+
+ Quem sao os usuários? Qual o nível de conhecimento dos usuários?
+
+
+    1. Atendente = Quem faz um pedido. (lista é gerada no sistema "GERA", sistema online) com (login e senha).
+
+    2. Estoquista = Separa os produtos, pré-seleciona os produtos da "Picking List".
+
+    3. Atendente (Back Office) = Conferencia (Deve fazer o faturamento correto), para isso possuir a funcão de gerar relatórios com dados citados e data.
+
+    4. Nível de conhecimento tecnológico ou computacional = baixíssimo. (Sistema deve ter interface gráfica intuitiva).
+
+
+3. Especificar requisitos funcionais utilizando Casos de Uso:
+
+ O caso de uso descreve um conjunto de seqüências de ações que o sistema desempenha
+ para produzir um resultado esperado pelo usuário.
+ Definir as funcões como conjunto de entrada, seu comportamento e componentes de saída.
+
+ FUNÇÕES:
+
+    1. Capturar banco de dados
+    2. Fazer login ou cadastro do usuário
+    3. Importar uma "Picking List" 
+    4. Processar a tabela importada por inteiro
+    5. Gerenciar relatórios de modo automático
+    6. Emitir mensagem ao "Back Office" de que a tabela foi processada (Funcao de "Packing" com 100% de acuracia) 
+    7. Impressao de tabela ou Histórico
+    8. Fazer logout ou encerrar sistema para que possa ser utilizado por outro funcionário
+
+
+4. Especificar requisitos não funcionais:
+
+ São os requisitos relacionados ao uso da aplicação em termos de desempenho,
+ usabilidade, confiabilidade, segurança, disponibilidade,
+ manutenibilidade e tecnologias envolvidas.
+
+    1. Sistema de seguranca com banco de dados SQLite, identifica o usuário que está utilizando o sistema.
+    2. Pedido no sistema (Gera) = cria controle para o estoquista.
+    3. Desempenho do software em linguagem de alto nível C++, os arquivos de extensão ".xls" e variáveis 
+       devem ser liberados da memória do computador que está utilizando o sistema, obtendo um processamento
+       rápido e eficaz. 
+
+
+DIAGRAMACÃO:
+
+5. Caso de uso:
+
+6. Classes (cada classe possui um cabecalho): 
+
+    1. Classe de modelo "SQLite" editável.
+    2. Classe para importar lista e manusear leitor de código de barras.
+    3. Classe Identificar e plotar listas de produtos no mesmo formato.
+    4. Classe principal com funcionalidades dos menus do sistema.
+    5. Classe de login
+    6. Classe "Procurar Items", de consulta ao arquivo de histórico
+
+7. Validacão: 
+
+    1. Versão de controle atual: V.1.0
+    2. Data de release: 29/05/2014
+    3. Número de patente: inexistente
+    4. Licensa: LPG
+    5. Ambiente ou plataforma: Win 32
+    6. SDK (Kits de desenvolvimento): Qt Creator 4.8, Inno Setup, CMake 2.8, MingW
+
+

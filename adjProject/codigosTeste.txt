@@ -1,0 +1,508 @@
+Exemplos de Orientacao a objeto:
+
+QLabel *label = new QLabel ("Tal nome"); // declara *label = ponteiro da classe QLabel
+
+int* a; //declara um ponteiro para endereco de variavel inteira
+
+a=new int(3); //aloca memoria para o apontado por a, gravando neste o valor 3
+
+delete a; //deleta o ponteiro *a, desaloca memoria
+
+Ponteiro:
+label->show(); (ponteiro é *label)
+a->b é igual: (*a).b (membro b do ponteiro a)
+
+Classes e objetos:
+
+a::b (membro b na classe a)
+tuna::b(membro b na classe tuna)
+
+a.b (membro b do objeto a)
+tuna.b (membro b do objeto tuna)
+
+Criar um objeto:
+
+Object meuObjeto = new Object ();
+
+Como chamar um objeto de outro classe:
+
+//    Exemplo:1
+//    quero chamar o "QString log" da classe login.cpp, para isso declaro em seu .header file (login.h) a variavel
+//            global QString log; em (public:).
+//    na minha classe atual (mainwindow.cpp) chamo com um ponteiro criado no .header file da minha classe atual
+//    (mainwindow.h), login *loginObj;. E entao eu chamo o objeto na minha classe atual: loginObj->log;
+//    qDebug() << "TESTAR CHAMANDO STRING: " << loginObj->log ;
+
+Como criar Widget e novo layout com textEdit (object):
+
+  //    QWidget *textEditWindow = new QWidget;
+  //    textEditWindow = setWindowTitle("Procurar items...");
+  //    QTextEdit *textEdit = new QTextEdit;
+  //    QHBoxLayout *layout = new QHBoxLayout;
+  //    layout->addItem(textEdit);
+  //    textEditWindow->setLayout(layout);
+
+Exemplo de como abrir outra janela (login = classe) (loginObj = objeto)
+  //    login loginObj();
+  //    loginObj.setModal(true);
+  //    loginObj.exec();
+
+
+LOGICA BOOLEANA E COMPARADORES:
+
+// operador de comparacao "OU": ||
+// operador AND: &&
+//!(5 == 5)   // evaluates to false because the expression at its right (5 == 5) is true
+//!(6 <= 4)   // evaluates to true because (6 <= 4) would be false
+//!true       // evaluates to false
+//!false      // evaluates to true
+
+COMO CRIAR CONEXAO DE BANCO DE DADOS, CRIAR UMA TABELA E INSERIR DADOS:
+
+static bool createConnection()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(":memory:");
+    if (!db.open()) {
+        QMessageBox::critical(0, qApp->tr("Nao foi possivel abrir banco de dados"),
+            qApp->tr("Impossivel estabelecer conexao com banco de dados.\n"),
+                              QMessageBox::Cancel);
+        return false;
+    }
+
+    QSqlQuery query;
+    query.exec("create table person (id int primary key, "
+               "firstname varchar(20), lastname varchar(20))");
+    query.exec("insert into person values(101, 'Danny', 'Young')");
+    query.exec("insert into person values(102, 'Christine', 'Holand')");
+    query.exec("insert into person values(103, 'Lars', 'Gordon')");
+    query.exec("insert into person values(104, 'Roberto', 'Robitaille')");
+    query.exec("insert into person values(105, 'Maria', 'Papadopoulos')");
+    return true;
+}
+
+COMANDO DE COMO SELECIONAR ITEMS DE UM BANCO DE DADOS
+    //   Antigo comando SQL:
+    //   if(qry.exec("SELECT login, senha FROM users WHERE login=\'"
+    //                + login + "AND senha =\'" + senha + "\'"))
+
+
+//Outra maneira de importar planilha utilizando ActiveQT
+QAxWidget excel("Excel.Application");
+excel.setVisible(true);
+
+QAxObject * workbook = excel.querySubObject("WorkBooks");
+workbook->dynamicCall("Open (const QStrig&)", nomeArq);
+if (!workbook->isNull()){
+qDebug () << nomeArq << "Importado";
+} else {
+
+    QAxObject *excel;
+    QAxObject *wbooks;
+    QAxObject *book;
+    QAxObject *sheets; //n utilizada
+
+    excel = new QAxObject("Excel.Application", this);
+    excel->setProperty("Visible", 0);
+    excel->setProperty("DisplayAlerts", 0);
+    wbooks = excel->querySubObject("Workbooks");
+    book = wbooks->querySubObject("Open (const QString&)",(nomeArq));
+    sheets = workbook->querySubObject( "Worksheets" );
+
+    workbook->dynamicCall("Close()");
+    excel->dynamicCall("Quit()");
+}
+*/
+
+SEGUNDO EXEMPLO DE COMO ABRIR ARQUIVO EXCEL USANDO ActiveX:
+
+
+    QAxWidget excel("Excel.Application");
+    excel.setProperty("Visible", true);
+
+    QAxObject * workbooks = excel.querySubObject("WorkBooks");
+
+    workbooks->dynamicCall("Add");
+    workbooks->dynamicCall("Open (const QString&)", QString("C:\\1.xls"));
+    QAxObject *worksheets = workbooks->querySubObject("Sheets");
+    worksheets->dynamicCall("Add()"); //insert new Sheet
+
+    QAxObject * workbook = excel.querySubObject("ActiveWorkBook");
+    //QAxObject * worksheets = workbook->querySubObject("WorkSheets");
+    workbooks->dynamicCall("Open (const QString&)", QString("C:\\1.xls"));
+    //workbook->dynamicCall("SaveAs (const QString&)", QString("C:\\test7.xls"));
+    //workbook->dynamicCall("Close (Boolean)", false);
+
+
+    int intCount = worksheets->property("Count").toInt();
+    for (int i = 1; i <= intCount; i++)
+    {
+        int intVal;
+        QAxObject * worksheet = workbook->querySubObject("Worksheets(int)", i);
+        qDebug() << i << worksheet->property("Name").toString();
+        QAxObject * range = worksheet->querySubObject("Range(F6)");//ABLE TO WRITE DATA IN CELL F6
+        intVal = range->property("Value").toInt();
+        range->setProperty("Value", QVariant(7/*intVal+1*/));//DATA TO BE WRITTEN=7
+
+        QAxObject * range2 = worksheet->querySubObject("Range(C4)"); //ABLE TO WRITE DATA IN CELL C4
+        intVal = range2->property("Value").toInt();
+        range2->setProperty("Value", QVariant(4/*intVal+1*/));//DATA TO BE WRITTEN=4
+    }
+
+    QAxObject * worksheet = workbook->querySubObject("Worksheets(int)", 1);
+    QAxObject * usedrange = worksheet->querySubObject("UsedRange");
+    QAxObject * rows = usedrange->querySubObject("Rows");
+    QAxObject * columns = usedrange->querySubObject("Columns");
+    int intRowStart = usedrange->property("Row").toInt();
+    int intColStart = usedrange->property("Column").toInt();
+    int intCols = columns->property("Count").toInt();
+    int intRows = rows->property("Count").toInt();
+
+    for (int i = intRowStart; i < intRowStart + intRows; i++)
+    {
+        for (int j = intColStart; j <= intColStart + intCols; j++)
+        {
+            QAxObject * range = worksheet->querySubObject("Cells(int,int)", i, j );
+            qDebug() << i << j << range->property("Value");
+        }
+    }
+    excel.setProperty("DisplayAlerts", 0);
+    //  workbook->dynamicCall("SaveAs (const QString&)", QString("C:\\test5.xls"));
+    excel.setProperty("DisplayAlerts", 1);
+    // workbook->dynamicCall("Close (Boolean)", false);
+
+    //excel.dynamicCall("Quit (void)");
+
+
+
+OUTRO EXEMPLO DE COMO LER ARQUIVO DO EXCEL:
+
+
+void MainWindow::on_pushButton_clicked()
+{
+
+//    QAxWidget excel("Excel.Application");
+//    excel.setProperty("Visible", true);
+
+    QAxObject* excel = new QAxObject( "Excel.Application", 0 );
+    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "C:\\1.xls" );
+    QAxObject* sheets = workbook->querySubObject( "Worksheets" );
+
+    QList<QVariantList> data; //Data list from excel, each QVariantList is worksheet row
+
+    //worksheets count
+    int count = sheets->dynamicCall("Count()").toInt();
+
+    count = sheets->property("Count").toInt();
+    for (int i=1; i<=count; i++) //cycle through sheets
+    {
+        //sheet pointer
+        QAxObject* sheet = sheets->querySubObject( "Item( int )", i );
+
+        QAxObject* rows = sheet->querySubObject( "Rows" );
+        int rowCount = rows->dynamicCall( "Count()" ).toInt(); //unfortunately, always returns 255, so you have to check somehow validity of cell values
+        QAxObject* columns = sheet->querySubObject( "Columns" );
+        int columnCount = columns->property("Count").toInt();
+
+        for (int row=1; row <= rowCount; row++)
+        {
+            QVariantList dataRow;
+            bool isEmpty = true; //when all the cells of row are empty, it means that file is at end (of course, it maybe not right for different excel files. it's just criteria to calculate somehow row count for my file)
+            for (int column=1; column <= columnCount; column++)
+            {
+                //Do something usefule here
+            }
+            if (isEmpty) //criteria to get out of cycle
+                break;
+            data.append(dataRow);
+
+        }
+    }
+    workbook->dynamicCall("Close()");
+    excel->dynamicCall("Quit()");
+
+    QFile file1("C:\\testeXLS.html");
+    file1.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&file1);
+    out << excel->generateDocumentation();
+
+    //file1.close();
+}
+
+
+
+
+Este algoritmo mostrando os items da primeira tabela, testar funcoes.
+    //teste nova tabela somente para codigo e quantidade
+
+//    for (int i = 1; i <=20; i++){
+//        for (int j= 1; j<=2; j++){
+//            cell = excel->querySubObject("Cells(Int, Int)", i, j);
+//            QString valC = cell->dynamicCall("value").toString();
+//            ui->textEdit->append(valC);
+//            QTableWidgetItem *item = new QTableWidgetItem;
+//            item->setText(valC);
+//            item->setText(cell->dynamicCall("Value").toString());
+//            //QTableWidget *tableWidget2 = new QTableWidget;
+//            // ui->tableWidget2->setHidden(0);
+//            ui->tableWidget->setRowCount(20);
+//            ui->tableWidget->setColumnCount(2);
+//            ui->tableWidget2->setItem(i,j,item);
+//        }
+//    }
+
+
+//Items are created ouside the table (with no parent widget) and inserted into the table with setItem():
+
+//         QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(
+//             (row+1)*(column+1)));
+//         tableWidget->setItem(row, column, newItem);
+
+
+
+Estudar funcao do objeto QString "QStringRef"
+
+//                QString x = "Nine pineapples";
+//                QStringRef y = x.midRef(5, 4);      // y == "pine"
+//                qDebug() << y;
+//                QStringRef z = x.midRef(5);         // z == "pineapples"
+//                qDebug() << z;
+
+Funcao de insert QString
+
+//inputResultStr = ui->linhaInputId->text();
+//ESTUDAR FUNCAO PARA COMPARAR STRINGS QUANDO 4 CHARS
+//QString & QString::insert ( int position, const QString & str );
+//    QString str = "Meal";
+//    str.insert(1, QString("ontr")); //dps da primeira letra
+// str == "Montreal"
+
+//TESTES:
+//Transforma item da tabela QTableWidget para INT 16bytes.
+//    int conversao = static_cast<quint16>(ui->tableWidget->item(pontoQntX,pontoQntY)->data(Qt::EditRole).toUInt());
+//    qDebug() << "Teste conversao para INT: " << conversao;
+
+//    qDebug() << "teste com pontos de ID: " << ui->tableWidget->item(pontoIdX,pontoIdY)->text();
+
+//    qDebug() << "teste com pontos de QUANTIDADE: " << ui->tableWidget->item(pontoQntX,pontoQntY)->text();
+//    pontoQntX++;
+//    qDebug() << "pos incremento1: " << ui->tableWidget->item(pontoQntX,pontoQntY)->text();
+//    pontoQntX++;
+//    qDebug() << "pos incremento2: " << ui->tableWidget->item(pontoQntX,pontoQntY)->text();
+//    pontoQntX++;
+//    qDebug() << "pos incremento3: " << ui->tableWidget->item(pontoQntX,pontoQntY)->text();
+//    pontoQntX++;
+//    qDebug() << "pos incremento4: " << ui->tableWidget->item(pontoQntX,pontoQntY)->text();
+
+
+EXEMPLO DE TIME:
+
+//        QTimer* timer = new QTimer(this);
+//           timer->setSingleShot(false);
+//           timer->setInterval(10 * 2000);
+//        connect(timer, SIGNAL(timeout()),this, SLOT(atualizarInput()));
+//#atualizarInput é funcao para atualizar setText, input do usuario
+
+
+EXEMPLO DE KEYEVENT
+
+//void procPickingList::keyPressEvent(QKeyEvent *event){
+//    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+//    {
+//        qDebug() << "Enter foi pressionado, conferir codigo de produto...";
+//    }
+//}
+
+EXEMPLOS DE CONNECT (SLOT AND SIGNALS)
+
+// procPickingList *objeto = new procPickingList (this);
+//QObject::connect(ui->linhaInputId,SIGNAL(returnPressed()),this, SIGNAL(comparar(inputResultStr,idProd)));
+//QObject::connect(ui->linhaInputId, SIGNAL(returnPressed()),ui->linhaId,SLOT(selectAll()));
+//QObject::connect(ui->linhaInputId, SIGNAL(returnPressed()),objeto,SLOT(update()));
+//QObject::connect(ui->linhaInputId, SIGNAL(returnPressed()),ui->linhaInputId,SLOT(update()));
+//QObject::connect(ui->linhaInputId, SIGNAL(textChanged(QString)),ui->linhaId,SLOT(comparar(QString,QString)));
+
+//QObject::connect(ui->linhaInputId, SIGNAL(textEdited(QString)),ui->linhaInputId,SLOT(update()));
+//QObject::connect(ui->linhaInputId, SIGNAL(textEdited(QString)),ui->linhaId,SLOT(selectAll()));
+//QObject::connect(ui->linhaInputId, SIGNAL(returnPressed()),ui->linhaInputId,SLOT(clear()));
+
+EXEMPLO DE COMO COMPARAR QSTRINGS
+
+//int comparaStrings = QString::compare(inputResultStr,idProd,Qt::CaseSensitive);
+//qDebug() <<"Resultado de int comparaStrings: " << comparaStrings;
+//qDebug() << "Quantidade restant: " << conversao;
+
+
+
+/*
+//Tentativa de importar linhas das planilhas como banco de dados
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    db.setDatabaseName("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=" +
+                       QString("C:\SQLite\Menor.xls"));
+
+    if(db.open())
+    {
+     QSqlQuery query("select''' from [" + QString("Sheet1") + "$A1:J3]"); // Select range, place A1:B5 after $
+     while (query.next())
+     {
+     QString column1= query.value(0).toString();
+     qDebug() << column1;
+     }
+    }
+
+*/
+
+
+
+
+
+EXEMPLO DE COLORIR LINHA DE UMA TABELA
+
+//tentativa de colorir somente linha do codigo de produto conferido
+/*
+ //preenche o fundo da celula conferida em amarelo
+ QString _CustomStyle = QString(
+       "QTableWidget::item {"
+       "background-color: rgba(162, 186, 60);"
+       "}");
+ ui->tableWidget->setStyleSheet(_CustomStyle);
+
+//Preenche cor de fundo na tabela toda
+ui->tableWidget->setStyleSheet("background: yellow;"
+                             "font: bold 10px;");
+
+ QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg((pontoIdX+1)*(pontoQntY+1)));
+         newItem->setData(Qt::BackgroundRole, (pontoIdX%2)>0 ? "background: yellow;" "background: yellow;");
+         ui->tableWidget->setItem(pontoIdX, pontoQntY, newItem);
+ */
+
+
+
+
+
+EXEMPLO DE COMO SALVAR PLANILHA QTableWidget COMO CSV
+/*
+ *
+QFile arquivo (nomeArq);
+if (arquivo.open(QFile::WriteOnly | QFile::Truncate))
+{
+    QTextStream data( &arquivo );
+    QStringList strList;
+    qDebug() << "Travei aqui 0 ";
+    for( int c = 0; c < ui->tableWidget->columnCount(); ++c )
+    {
+        strList <<
+                   "\" " +
+                   ui->tableWidget->horizontalHeaderItem(c)->data(Qt::DisplayRole).toString() +
+                   "\" ";
+    }
+    qDebug() << "Travei aqui 0.9";
+    strList <<
+               "\" " +
+               ui->textEdit->toPlainText().toUtf8() +
+               "\" ";
+    data << strList.join(";") << "\n";
+    qDebug() << "Travei aqui 1 ";
+    for( int r = 0; r < ui->tableWidget->rowCount(); ++r )
+    {
+        strList.clear();
+        qDebug() << "Travei aqui 2 ";
+        for( int c = 0; c < ui->tableWidget->columnCount(); ++c ) {
+
+            QTableWidgetItem* item = ui->tableWidget->item(r,c);        //Load items
+            if (!item || item->text().isEmpty())                        //Test if there is something at item(r,c)
+            {
+                ui->tableWidget->setItem(r,c,new QTableWidgetItem("0"));//IF there is nothing write 0
+            }
+            strList << "\" "+ui->tableWidget->item( r, c )->text()+"\" ";
+            qDebug() << "Travei aqui 3 ";
+        }
+        data << strList.join( ";" )+"\n";
+        qDebug() << "Travei aqui 4";
+    }
+
+
+    //statusBar()->showMessage(tr("File saved successfully."), 3000);
+
+    QMessageBox::information(this, tr ("Arquivo salvo"),
+                             tr ("Arquivo foi salvo com sucesso..."), QMessageBox::Ok);
+    ui->labelLog->setText("[+]Arquivo salvo!");
+    //nomeArq.close();
+}
+*/
+
+
+
+//ATUALIZAR INPUT DO USUARIO COM LEITOR USB
+/*
+int tamanhoIdProd = idProd.size();
+if (tamanhoIdProd <= 5){
+    inputResult = inputIdProd.midRef(0,5);
+    inputResultStr = inputResult.toString();
+}
+if (tamanhoIdProd >= 5){
+    inputResult = inputIdProd.midRef(7,4);
+    inputResultStr = inputResult.toString();
+}
+if (tamanhoIdProd == 9){
+    inputResult = inputIdProd.midRef(0,9);
+    inputResultStr = inputResult.toString();
+} else
+    inputResult = inputIdProd.midRef(0,8); //default = 7,5
+inputResultStr = inputResult.toString();
+*/
+
+
+/*
+
+QString itemVendido;
+QTableWidgetItem *cellVendido = ui->tableWidget->item(102, 5);
+cellVendido = new QTableWidgetItem;
+ui->tableWidget->setItem(94, 5, cellVendido);
+cellVendido->setText(itemVendido);
+ui->tableWidget->setRowCount(100);
+QTableWidgetItem *item;
+while ( query4.next() ) {
+for (int i = 0; i < 5; ++i) {
+item = new QTableWidgetItem();
+item->setText(cellVendido.toString());
+ui->tableWidget->setItem(pontoIdX,i,item);
+}
+++a;
+}
+
+//teste para copiar coluna:
+
+
+QAbstractItemModel * model = ui->tableWidget->model();
+QItemSelectionModel * selection = ui->tableWidget->selectionModel();
+QModelIndexList indexes = selection->selectedIndexes();
+
+QString selected_text;
+// You need a pair of indexes to find the row changes
+QModelIndex previous = indexes.first();
+QTableWidgetItem *current = ui->tableWidget->item(pontoIdX, 4);
+indexes.removeFirst();
+foreach(current, indexes)
+{
+    QVariant data = model->data(current);
+    QString text = data.toString();
+    // At this point `text` contains the text in one cell
+    selected_text.append(text);
+    qDebug() << "Teste copiar coluna: " << text;
+    // If you are at the start of the row the row number of the previous index
+    // isn't the same.  Text is followed by a row separator, which is a newline.
+    if (current.row() != previous.row())
+    {
+        selected_text.append('\n');
+    }
+    // Otherwise it's the same row, so append a column separator, which is a tab.
+    else
+    {
+        selected_text.append('\t');
+    }
+    previous = current;
+}
+QApplication.clipboard()->setText(selected_text);
+*/

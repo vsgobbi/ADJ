@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/newPrefix">
+        <file>backLogin.png</file>
+        <file>excelLogo.png</file>
+        <file>deletarButton.png</file>
+        <file>frameCorreto.png</file>
+        <file>frameErrado.png</file>
+        <file>icons/abrir_preto.png</file>
+        <file>icons/anel_icon.png</file>
+        <file>icons/barReaderIcon.png</file>
+        <file>icons/blackTux.png</file>
+        <file>icons/botiProjicon.ico</file>
+        <file>icons/databaseIcon.png</file>
+        <file>icons/dbOptionIcon.png</file>
+        <file>icons/docIcon.png</file>
+        <file>icons/helpIcon.png</file>
+        <file>icons/histIcon.png</file>
+        <file>icons/iconeProcessar.png</file>
+        <file>icons/informationIcon.png</file>
+        <file>icons/optionIcon.png</file>
+        <file>icons/pdfIcon.png</file>
+        <file>icons/printIcon.png</file>
+        <file>icons/relatorios.png</file>
+        <file>icons/sair.png</file>
+        <file>icons/saveIcon.png</file>
+        <file>icons/searchIcon.png</file>
+        <file>icons/sobreIcon.png</file>
+        <file>icons/background1200.jpg</file>
+        <file>icons/backCadastro.jpg</file>
+        <file>icons/backlogin.jpg</file>
+        <file>icons/exportarPlanilha.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>icons/exportarPlanilha.png</file>
+    </qresource>
+</RCC>

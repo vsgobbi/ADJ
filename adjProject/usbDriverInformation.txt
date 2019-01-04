@@ -1,0 +1,55 @@
+this function give u the infomation of usb drive plz pass drive letter as parameter .
+
+#include <winbase.h>
+#include <windows.h>
+#include <initguid.h>
+#include <dbt.h>
+
+bool IsUsbDevice( wchar_t letter )
+{
+    wchar_t volumeAccessPath[] = L"\\\\.\\X:"; //passar o endereco do driver
+    volumeAccessPath[4] = letter;
+
+    HANDLE deviceHandle = CreateFileW(
+                volumeAccessPath,
+                0,                // no access to the drive
+                FILE_SHARE_READ | // share mode
+                FILE_SHARE_WRITE,
+                NULL,             // default security attributes
+                OPEN_EXISTING,    // disposition
+                0,                // file attributes
+                NULL);            // do not copy file attributes
+
+    // setup query
+    STORAGE_PROPERTY_QUERY query;
+    memset(&query, 0, sizeof(query));
+    query.PropertyId = StorageDeviceProperty;
+    query.QueryType = PropertyStandardQuery;
+    //query.AdditionalParameters.
+
+    // issue query
+    DWORD bytes;
+    STORAGE_DEVICE_DESCRIPTOR devd;
+    STORAGE_BUS_TYPE busType = BusTypeUnknown;
+
+    if (DeviceIoControl(deviceHandle,
+                        IOCTL_STORAGE_QUERY_PROPERTY,
+                        &query, sizeof(query),
+                        &devd, sizeof(devd),
+                        &bytes, NULL))
+    {
+        busType = devd.BusType;
+        //qint64 abc=devd.Size;
+        //GET_LENGTH_INFORMATION *sizeInfo;
+        //DeviceIoControl(lDevice, IOCTL_DISK_GET_LENGTH_INFO, NULL, 0, sizeInfo, sizeof(sizeInfo), &junk, (LPOVERLAPPED) NULL);
+    } else {
+        std::wcout << L"Failed to define bus type for: " << letter;
+    }
+    CloseHandle(deviceHandle);
+    return BusTypeUsb == busType;
+}
+
+
+
+//checar:
+//https://github.com/wang-bin/qdevicewatcher

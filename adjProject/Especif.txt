@@ -1,0 +1,59 @@
+ESPECIFICACOES DE SOFTWARE (UML):
+
+
+ANALISE E ESPECIFICACOES DE REQUISITOS:
+
+1. Definir o que são requisitos de software
+
+   São todos os casos que o sistema utiliza.
+
+2. Apresentar técnicas para descrever o domínio, usuários e tarefas.
+
+ Quem sao os usuários? Qual o nível de conhecimento dos usuários?
+
+
+
+    1. Atendente = faz pedido
+
+    2. Estoquista separa os produtos (lista é gerada no sistema "Gera", sistema online) (login e senha)
+
+    3. Atendente = Conferencia (fazer o faturamento correto)
+   (Gerar relatorios com dados e datas)
+
+    4. Nivel de conhecimento tecnológico = baixíssimo
+
+3. ***Especificar requisitos funcionais utilizando Casos de Uso
+
+ O caso de uso descreve um conjunto de seqüências de
+ ações que o sistema desempenha para produzir um resultado esperado pelo usuário.
+ Definir as funcões como conjunto de entrada, seu comportamento e componentes de saída.
+
+ FUNÇÕES:
+
+    1. Capturar banco de dados
+    2. Atualizar tabelas e precos
+    3. beepar com codigos de barras usb
+    4. Conferir tabelas de pedidos
+    5. Gerenciar relatórios
+    6. Faturar pedidos
+    7. Impressao da tabela
+    8. Nota fiscal é gerada no programa Gera
+
+
+
+4. ***Especificar requisitos não funcionais
+
+ São os requisitos relacionados ao uso da aplicação em termos de desempenho,
+ usabilidade, confiabilidade, segurança, disponibilidade,
+ manutenibilidade e tecnologias envolvidas.
+
+    1. Sem seguranca, somente identificar usuário que está utilizando o sistema.
+    2. Pedido no sistema (Gera) = cria controle para o estoquista.
+
+DIAGRAMACAO:
+
+5. Caso de uso
+
+6. Classes: 1. Classe de modelo SQL editável
+            2. Classe para leitor de código de barras
+            3. Classe Identificar e plotar listas de produtos no mesmo formato

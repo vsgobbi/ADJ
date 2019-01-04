@@ -1,0 +1,15 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\seconddialog.o
+./release\login.o
+./release\cadastroUser.o
+./release\procpickinglist.o
+./release\qrc_iconesPrim.o
+./release\qrc_procurarTexto.o
+./release\moc_mainwindow.o
+./release\moc_seconddialog.o
+./release\moc_login.o
+./release\moc_cadastroUser.o
+./release\moc_procpickinglist.o
+);

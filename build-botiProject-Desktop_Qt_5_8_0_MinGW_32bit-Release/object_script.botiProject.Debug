@@ -1,0 +1,15 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\seconddialog.o
+./debug\login.o
+./debug\cadastroUser.o
+./debug\procpickinglist.o
+./debug\qrc_iconesPrim.o
+./debug\qrc_procurarTexto.o
+./debug\moc_mainwindow.o
+./debug\moc_seconddialog.o
+./debug\moc_login.o
+./debug\moc_cadastroUser.o
+./debug\moc_procpickinglist.o
+);

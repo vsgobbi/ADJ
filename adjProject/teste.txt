@@ -1,0 +1,23 @@
+As tabelas são a estrutura básica em que os dados são armazenados na base de dados. 
+Dado que na maior parte dos casos não existe uma forma de o vendedor da base de dados 
+saber antecipadamente quais são as suas necessidades em termos de armazenamento de dados, 
+é provável que seja necessário criar tabelas na base de dados. Muitas ferramentas de bases
+de dados permitem-lhe criar tabelas sem programar em linguagem SQL, mas como as tabelas 
+são o receptáculo de todos os dados, é importante incluir a sintaxe CREATE TABLE neste tutorial.
+
+Antes de abordarmos a sintaxe SQL para CREATE TABLE, é boa ideia compreender a estrutura de uma tabela.
+As tabelas encontram-se divididas em linhas e colunas. Cada linha representa um dado individual 
+e cada coluna pode ser vista como uma representação dessa peça de dados. Assim, por exemplo, 
+se tivermos uma tabela para registar as informações dos clientes, as colunas podem incluir informações
+como Primeiro Nome, Apelido, Morada, Cidade, País, Data de Nascimento, etc. Como tal, 
+ao especificarmos uma tabela, incluímos os cabeçalhos das colunas e os tipos de dados
+para essa coluna em particular.
+
+Assim sendo, quais são os tipos de dados? Normalmente, os dados encontram-se disponíveis numa variedade
+de formas. Podem ser um número inteiro (tal como 1), um número real (tal como 0,55), 
+uma cadeia (tal como 'sql'), uma expressão de data/hora (tal como '2000-JAN-25 03:22:22') 
+ou até mesmo um formato binário. Ao especificarmos uma tabela, é necessário especificarmos o tipo
+de dados associados a cada coluna(ou seja, iremos especificar o 'Primeiro Nome' do tipo de char(50) -
+o que significa uma cadeia com 50 caracteres). Um aspecto a destacar é que diferentes bases 
+de dados relacionais permitem diferentes tipos de dados, pelo que é aconselhável consultar primeiro
+um documento de referência relativo à base de dados específica.
